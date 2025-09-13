@@ -39,22 +39,30 @@ class Controller
     }
 
     protected function render(string $path, array $params = []): void
-    {
-        $filePath = _ROOTPATH_.'/templates/'.$path.'.php';
+{
+    // Calcul du chemin relatif depuis ce fichier Controller.php
+    $filePath = __DIR__ . '/../../templates/' . $path . '.php';
 
-        try{
-            if (!file_exists($filePath)){
-                //Générer erreur
-                throw new \Exception("Fichier non trouvé :".$path);
-            } 
 
-            extract($params);
-            require_once $filePath;
-            
-        } catch (\Exception $e) {
-            error_log("Erreur de rendu : " . $e->getMessage());
-            echo "Erreur : " . $e->getMessage();
+    try {
+        if (!file_exists($filePath)) {
+            // Générer erreur si le fichier n'existe pas
+            throw new \Exception("Fichier non trouvé : " . $path);
         }
+
+        // Extraire les variables du tableau $params pour le template
+        extract($params);
+
+        // Inclure le template
+        require $filePath;
+
+    } catch (\Exception $e) {
+        // Journaliser l'erreur
+        error_log("Erreur de rendu : " . $e->getMessage());
+        // Afficher un message d'erreur simple à l'utilisateur
+        echo "Erreur : " . $e->getMessage();
     }
+}
+
 
 }

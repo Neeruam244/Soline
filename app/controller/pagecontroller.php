@@ -2,6 +2,10 @@
 
 namespace app\Controller;
 
+use app\Model\ContactForm;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
 class pagecontroller extends Controller
 {
     public function route(): void
@@ -65,9 +69,53 @@ class pagecontroller extends Controller
         ]);
     }
 
-    protected function contact()
-    {
-        $this->render('page/contact', [ 
-        ]);
+        public function contact(): void
+{
+    $success = null;
+    $errors = [];
+    $form = null;
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        error_log("POST reçu : " . print_r($_POST, true));
+        $form = new \app\Model\ContactForm($_POST);
+
+        if ($form->validate()) {
+            $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+            try {
+                // Configuration SMTP depuis le .env
+                $mail->isSMTP();
+                $mail->Host       = $_ENV['MAIL_HOST'];
+                $mail->SMTPAuth   = true;
+                $mail->Username   = $_ENV['MAIL_USERNAME'];
+                $mail->Password   = $_ENV['MAIL_PASSWORD'];
+                $mail->SMTPSecure = $_ENV['MAIL_ENCRYPTION'];
+                $mail->Port       = $_ENV['MAIL_PORT'];
+
+                $mail->setFrom($_ENV['MAIL_FROM'], $_ENV['MAIL_FROM_NAME']);
+                $mail->addAddress($_ENV['MAIL_TO']);
+
+                $mail->isHTML(false);
+                $mail->Subject = 'Nouveau message du formulaire de contact';
+                $mail->Body    = "Nom: {$form->getName()}\nPrénom: {$form->getSurname()}\nEmail: {$form->getEmail()}\nObjet: {$form->getObject()}\nMessage:\n{$form->getMessage()}";
+
+                $mail->send();
+                $success = "Message envoyé avec succès !";
+
+            } catch (\PHPMailer\PHPMailer\Exception $e) {
+                $errors[] = "Erreur lors de l'envoi : " . $mail->ErrorInfo;
+            }
+        } else {
+            $errors = $form->getErrors();
+        }
+    }
+
+    // Rendu du template contact
+    error_log("form: " . ($form ? "ok" : "null") . ", success: " . ($success ?? 'null'));
+
+    $this->render('page/contact', [
+        'form' => $form,
+        'success' => $success,
+        'errors' => $errors
+    ]);
     }
 }

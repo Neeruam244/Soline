@@ -1,39 +1,18 @@
-<?php 
-require_once _ROOTPATH_.'\templates\header.php'; 
+<?php require_once __DIR__ . '/../header.php'; 
 
-require_once 'ContactForm.php';
-
-$successMessage = '';
-$errors = [];
-$form = null;
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $form = new ContactForm($_POST);
-
-    if ($form->validate()) {
-        if ($form->sendEmail()) {
-            $successMessage = 'Votre message a été envoyé avec succès.';
-        } else {
-            $errors['send'] = 'Erreur lors de l’envoi du message. Veuillez réessayer plus tard.';
-        }
-    } else {
-        $errors = $form->getErrors();
-    }
-}
-
-?>
-
-<?php if ($successMessage): ?>
-    <p style="color: green;"><?= $successMessage ?></p>
+ if(isset($errors) && count($errors) > 0): ?>
+    <div class="alert" style="color:red;">
+        <ul>
+            <?php foreach($errors as $error): ?>
+                <li><?= htmlspecialchars($error) ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>
+<?php if(isset($success) && $success): ?>
+    <div class="alert" style="color:green;"><?= htmlspecialchars($success) ?></div>
 <?php endif; ?>
 
-<?php if (!empty($errors)): ?>
-    <ul style="color: red;">
-        <?php foreach ($errors as $error): ?>
-            <li><?= $error ?></li>
-        <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
 
 <section class="bg-contact">
     <h1 class="title-contact">Envie d'en savoir plus ?</h1>
@@ -56,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="body-form">
                 <div>
                     <div class="input-group">
-                        <input required="" type="text" name="name" autocomplete="off" class="input" id="nom" value="<?= $form ? $form->getName() : '' ?>"> 
+                        <input required="" type="text" name="name" autocomplete="off" class="input" id="nom" value="<?= $form ? $form->getName() : '' ?>">
                         <label class="user-label" for="nom">Vote nom</label> 
                     </div>
                     <div class="input-group">
@@ -80,10 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>  
         </form>       
 
-        <div id="confirmationMessage" style="display:none; color:green; margin-top:10px;">
-            Merci, votre message a bien été envoyé !
-        </div>
 </section>
     
 
-<?php require_once _ROOTPATH_.'\templates\footer.php'; ?>
+<?php require_once __DIR__ . '/../footer.php'; ?>

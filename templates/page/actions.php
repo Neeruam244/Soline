@@ -1,4 +1,4 @@
-<?php require_once _ROOTPATH_.'\templates\header.php'; ?>
+<?php require_once __DIR__ . '/../header.php'; ?>
 
 <section class="bg-sport">
     <h1 class="title-actions">Nos actions</h1>
@@ -141,4 +141,4 @@
     </div>
 </section>
 
-<?php require_once _ROOTPATH_.'\templates\footer.php'; ?>
+<?php require_once __DIR__ . '/../footer.php'; ?>

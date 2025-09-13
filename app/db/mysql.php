@@ -14,37 +14,33 @@ class Mysql
 
     private function __construct()
     {
-        $conf = require_once _ROOTPATH_.'/config.php';
+        // ajouter \ pour constante globale
+        $conf = require_once __DIR__ . '/../../config.php';
 
-        if (isset($conf['db_name']))
-            $this->db_name = $conf['db_name'];
-
-        if (isset($conf['db_user']))
-            $this->db_user = $conf['db_user'];
-
-        if (isset($conf['db_password']))
-            $this->db_password = $conf['db_password'];
-
-        if (isset($conf['db_port']))
-            $this->db_port = $conf['db_port'];
-
-        if (isset($conf['db_host']))
-            $this->db_host = $conf['db_host'];
+        $this->db_name = $conf['db_name'] ?? null;
+        $this->db_user = $conf['db_user'] ?? null;
+        $this->db_password = $conf['db_password'] ?? null;
+        $this->db_port = $conf['db_port'] ?? 3306;
+        $this->db_host = $conf['db_host'] ?? 'localhost';
     }
 
-    public static function getInstance():self
+    public static function getInstance(): self
     {
         if (is_null(self::$_instance)){
-            self::$_instance = new mysql(); 
+            self::$_instance = new Mysql(); // majuscule correcte
         }
-        return self::$_instance; 
+        return self::$_instance;
     }
 
-    public function getPDO():\PDO // son role est de faire un new pdo et de le stocker 
+    public function getPDO(): \PDO
     {
-        if(is_null($this->pdo)) {
-            $this->pdo = new \PDO('mysql:dbname=' . $this->db_name . ';charset=utf8;host=' . $this->db_host.':'.$this->db_port, $this->db_user, $this->db_password);
+        if (is_null($this->pdo)) {
+            $this->pdo = new \PDO(
+                'mysql:host=' . $this->db_host . ';port=' . $this->db_port . ';dbname=' . $this->db_name . ';charset=utf8',
+                $this->db_user,
+                $this->db_password
+            );
         }
-        return $this->pdo; 
+        return $this->pdo;
     }
 }

@@ -1,4 +1,4 @@
-<?php require_once _ROOTPATH_.'\templates\header.php'; ?>
+<?php require_once __DIR__ . '/../header.php'; ?>
 
 <section class="pattern">
     <h1 class="title-soutient">Et</h1> <img src="/assets/photos/siiii.png" class="si" alt="si"><h1 class="title-soutient1">vous nous souteniez</h1>
@@ -27,4 +27,4 @@
 
 </section>
 
-<?php require_once _ROOTPATH_.'\templates\footer.php'; ?>
+<?php require_once __DIR__ . '/../footer.php'; ?>

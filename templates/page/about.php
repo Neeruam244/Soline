@@ -1,4 +1,4 @@
-<?php require_once _ROOTPATH_.'\templates\header.php'; ?>
+<?php require_once __DIR__ . '/../header.php'; ?>
 
 <section class="pattern">
     
@@ -47,4 +47,4 @@
 
 </section>
 
-<?php require_once _ROOTPATH_.'\templates\footer.php'; ?>
+<?php require_once __DIR__ . '/../footer.php'; ?>

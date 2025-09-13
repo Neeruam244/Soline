@@ -1,4 +1,4 @@
-<?php require_once _ROOTPATH_.'\templates\header.php'; ?>
+<?php require_once __DIR__ . '/../header.php';?>
 
 <section>
     <div class="containers">
@@ -82,5 +82,5 @@
 
 
 
-<?php require_once _ROOTPATH_.'\templates\footer.php'; ?>
+<?php require_once __DIR__ . '/../footer.php'; ?>
         
